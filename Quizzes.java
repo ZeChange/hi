@@ -2,27 +2,27 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Lessons {
-    private JFrame frame = new JFrame("Projectile Motion Lesson");
+public class Quizzes {
+    private JFrame frame = new JFrame("Projectile Motion Quiz");
     private int pageOn = 0;
-    JPanel[] lessonList = new JPanel[3];
+    JPanel[] quizList = new JPanel[3];
 
-    public Lessons() {
+    public Quizzes() {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Lesson 1:
         JPanel lesson1 = lesson1();
-        lessonList[0] = lesson1;
+        quizList[0] = lesson1;
         JPanel lesson2 = lesson2();
-        lessonList[1] = lesson2;
+        quizList[1] = lesson2;
         JPanel lesson3 = lesson3();
-        lessonList[2] = lesson3;
+        quizList[2] = lesson3;
 
         
-        for(int i = 0; i < lessonList.length; i++)
+        for(int i = 0; i < quizList.length; i++)
         {
-            JPanel completePage = lessonList[i];
+            JPanel completePage = quizList[i];
 
             JPanel buttons = new JPanel(new FlowLayout());
             Font button = new Font("Serif", Font.PLAIN, 20);;
@@ -44,7 +44,7 @@ public class Lessons {
             next.setFont(button);
             next.addActionListener(new ActionListener() {@Override
                 public void actionPerformed(ActionEvent f) {
-                    if(pageOn < lessonList.length-1)
+                    if(pageOn < quizList.length-1)
                     {
                         pageOn += 1;
                         System.out.println("mesus");
@@ -55,10 +55,10 @@ public class Lessons {
             buttons.add(back); buttons.add(next);
             completePage.add(buttons, BorderLayout.SOUTH);
 
-            lessonList[i] = completePage;
+            quizList[i] = completePage;
         }
 
-        frame.add(lessonList[0]);
+        frame.add(quizList[0]);
         frame.setVisible(true);
     }   
 
@@ -68,48 +68,36 @@ public class Lessons {
         frame = new JFrame("Projectile Motion Lesson");
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(lessonList[pageOn]);
+        frame.add(quizList[pageOn]);
         frame.setVisible(true);
     }
 
     public JPanel lesson1() {
-        String title = "The Sus";
+        String title = "question 1";
         String[] text = new String[5];
-        text[0] = "i love among us";
+        text[0] = "if the impostor is sus";
         text[1] = "does that truly make me sus?";
-        text[2] = "who cares to make a fuss";
-        text[3] = "being an impostor is a plus";
-        text[4] = "therefore, i love among us";
-        ImageIcon picture = new ImageIcon("Red.png");
-        LessonPage lesson1 = new LessonPage(title, text, picture);
+        QuizPage quiz = new QuizPage(frame, title, text);
 
-        return lesson1.getPanel();
+        return quiz.getPanel();
     }
 
     public JPanel lesson2() {
         String title = "2";
         String[] text = new String[5];
-        text[0] = "i love among us 222";
-        text[1] = "does that truly make me sus? 222";
-        text[2] = "who cares to make a fuss 222";
-        text[3] = "being an impostor is a plus 222";
-        text[4] = "therefore, i love among us 222";
-        ImageIcon picture = new ImageIcon("Red.png");
-        LessonPage lesson1 = new LessonPage(title, text, picture);
+        text[0] = "if the impostor is sus";
+        text[1] = "does that truly make me sus?";
+        QuizPage quiz = new QuizPage(frame, title, text);
 
-        return lesson1.getPanel();
+        return quiz.getPanel();
     }
     public JPanel lesson3() {
         String title = "3";
         String[] text = new String[5];
-        text[0] = "i love among us 333";
-        text[1] = "does that truly make me sus? 333";
-        text[2] = "who cares to make a fuss 333";
-        text[3] = "being an impostor is a plus 333";
-        text[4] = "therefore, i love among us 333";
-        ImageIcon picture = new ImageIcon("Red.png");
-        LessonPage lesson1 = new LessonPage(title, text, picture);
+        text[0] = "if the impostor is sus";
+        text[1] = "does that truly make me sus?";
+        QuizPage quiz = new QuizPage(frame, title, text);
 
-        return lesson1.getPanel();
+        return quiz.getPanel();
     }
 }

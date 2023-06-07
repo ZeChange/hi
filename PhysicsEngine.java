@@ -4,28 +4,45 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.awt.event.*;
 import java.lang.Math.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.border.Border;
 
 public class PhysicsEngine {
     // begin the engine on command, can't let it run automatically
-    public void initiate() {
-        JFrame frame = new JFrame("Projectile Motion Physics"); // Main Window
-        AppliedPhysics appliedPhysics = new AppliedPhysics();
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.add(appliedPhysics);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+    private JPanel simulation = new JPanel();
+    private int x; private int y;
+    private int velocity_x; private int velocity_y;
+    private int initial_velocity; private double launch_angle;
+    private int radius;
+
+    public PhysicsEngine(int x, int y, int velocity_x, int velocity_y, int initial_velocity, double launch_angle, int radius) {
+        this.x = x; this.y = y;
+        this.velocity_x = velocity_x; this.velocity_y = velocity_y;
+        this.initial_velocity = initial_velocity; this.launch_angle = launch_angle;
+        this.radius = radius;
+
+        simulation = new AppliedPhysics(x, y, velocity_x, velocity_y, initial_velocity, launch_angle, radius);
+        Border blackline = BorderFactory.createLineBorder(Color.black);
+        simulation.setBorder(blackline);
+    }
+
+    public JPanel getSimulation()
+    {
+        return simulation;
     }
 }
 
 class Physics { // class that will be inherited, contains main physics logic 
-    protected int x;
-    protected int y;
-    protected double velocity_y;
-    protected double velocity_x;
-    protected double initial_velocity;
-    protected double launch_angle;
+    private int x;
+    private int y;
+    private double velocity_y;
+    private double velocity_x;
+    private double initial_velocity;
+    private double launch_angle;
     
     private boolean isAirborne;
+    private double gravity = 9.8 / 60; // 60 fps
 
     // all these values depend on the question given. If only some are given (e.g: initial velocity and launch angle to calculate for the rest of the stuff, then we will solve for others.)
     // x = distance, y = height, velocity_x = Vx, velocity_y = Vy, initial_velocity = V
@@ -50,18 +67,10 @@ class Physics { // class that will be inherited, contains main physics logic
         }
     }
 
-    // public void applyGravity() {
-    //     if (isAirborne || velocity_y < 0) {
-    //         double gravity = 9.8/60; // 9.8 pixels/s^2 = 9.8 m/s^2
-    //         velocity_y += gravity;
-    //     }
-    // }
-
     public void gravity_and_move() { // simulate gravity and update coordinates
         if (isAirborne || velocity_y < 0) {
-            double gravity = 9.8 / 60; // 60 fps
-            velocity_y += gravity;
             y += velocity_y;
+            velocity_y += gravity;
             x += velocity_x;
         }
     }
@@ -89,6 +98,12 @@ class Physics { // class that will be inherited, contains main physics logic
     public double getXVelocity() {
         return velocity_x;
     }
+
+    public void stop() {
+        gravity = 0;
+        velocity_x = 0;
+        velocity_y = 0;
+    }
 }
 
 class Circle extends Physics { // circle class
@@ -110,35 +125,79 @@ class Circle extends Physics { // circle class
 
 class AppliedPhysics extends JPanel {
     private ArrayList<Physics> sprites = new ArrayList<>();
+    public Timer timer;
+    private int x; private int y;
+    private int velocity_x; private int velocity_y;
+    private int initial_velocity; private double launch_angle;
+    private int radius;
 
-    public AppliedPhysics() {
-        sprites.add(new Circle(50, 1080, 0, 0, 50, 60, 5)); // sprite initialization (x, y, velocity_x, velocity_y, radius)
+    public AppliedPhysics(int x, int y, int velocity_x, int velocity_y, int initial_velocity, double launch_angle, int radius) {
+        this.x = x; this.y = y;
+        this.velocity_x = velocity_x; this.velocity_y = velocity_y;
+        this.initial_velocity = initial_velocity; this.launch_angle = launch_angle;
+        this.radius = radius;
         
+        // Button for starting the sim
+        JButton startSim = new JButton("Start Simulator");
+        startSim.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                simulation();
+            }
+        });
+        add(startSim);
 
-        Timer timer = new Timer(1000/60, new ActionListener() { // 60 fps, update ball movement every 16.666666667 milliseconds
+        // bound to a scale of 10 pixels
+        JSlider initial_velocity_slider = new JSlider(JSlider.HORIZONTAL, 0, 15, 0);
+        initial_velocity_slider.setPaintTicks(true);
+        initial_velocity_slider.setPaintLabels(true);
+        
+        JLabel valueLabel = new JLabel(Integer.toString(initial_velocity_slider.getValue()));
+        initial_velocity_slider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                int initial_velocity = initial_velocity_slider.getValue();
+                setInitialVelocity(initial_velocity);
+                valueLabel.setText(Integer.toString(initial_velocity));
+            }
+        });
+        add(initial_velocity_slider);
+        add(valueLabel);
+    }
+
+    protected void simulation()
+    {
+        sprites.add(new Circle(x, y, velocity_x, velocity_y, initial_velocity, launch_angle, radius)); // sprite initialization (x, y, velocity_x, velocity_y, radius)
+        timer = new Timer(1000/60, new ActionListener() { // 60 fps, update ball movement every 16.666666667 milliseconds
             public void actionPerformed(ActionEvent e) {
                 for (Physics sprite : sprites) {
                     Circle circle = (Circle) sprite;
-                    System.out.println(sprite.getX() + ", " + sprite.getY() + " " + circle.getXVelocity() + ", " + circle.getYVelocity()); // testing purposes
-                    // sprite.applyGravity();
-                    // sprite.move();
-                    if ((sprite.getY() + circle.getRadius()) >= getHeight()) { // if the ball touches the ground, not the first time but the second time
+                    //System.out.println(sprite.getX() + ", " + sprite.getY() + " " + circle.getXVelocity() + ", " + circle.getYVelocity()); // testing purposes
+                    if ((sprite.getY() + circle.getRadius() >= (getHeight() - 1 * circle.getRadius()))) { // if the ball touches the ground, not the first time but the second time
                         circle.grounded();
                         if(circle.getYVelocity() > 0)
                         {
-                            System.exit(0); // stop program
+                            circle.stop();
+                            ((Timer)e.getSource()).stop();
                         }
                     } 
                     else{
                         circle.airborne();
                     }
-                    // sprite.applyGravity(); // this is used for application of physics logic
                     sprite.gravity_and_move();
                 }
                 repaint();
             }
         });
         timer.start();
+    }
+
+    public void setInitialVelocity(int initial_velocity)
+    {
+        this.initial_velocity = initial_velocity;
+    }
+
+    public void setInitialHeight(int height) {
+        this.y = getHeight() - y;
     }
 
     protected void paintComponent(Graphics g) { // draw circle
