@@ -32,7 +32,6 @@ public class Lessons {
                     if(pageOn != 0)
                     {
                         pageOn -= 1;
-                        System.out.println("notsus");
                         newScreen();
                     }
                 }
@@ -47,7 +46,6 @@ public class Lessons {
                     if(pageOn < lessonList.length-1)
                     {
                         pageOn += 1;
-                        System.out.println("mesus");
                         newScreen();
                     }
                 }
@@ -81,7 +79,7 @@ public class Lessons {
         text[3] = "being an impostor is a plus";
         text[4] = "therefore, i love among us";
         ImageIcon picture = new ImageIcon("Red.png");
-        LessonPage lesson1 = new LessonPage(title, text, picture);
+        LessonPage lesson1 = new LessonPage(frame, title, text, picture);
 
         return lesson1.getPanel();
     }
@@ -95,7 +93,7 @@ public class Lessons {
         text[3] = "being an impostor is a plus 222";
         text[4] = "therefore, i love among us 222";
         ImageIcon picture = new ImageIcon("Red.png");
-        LessonPage lesson1 = new LessonPage(title, text, picture);
+        LessonPage lesson1 = new LessonPage(frame, title, text, picture);
 
         return lesson1.getPanel();
     }
@@ -108,7 +106,7 @@ public class Lessons {
         text[3] = "being an impostor is a plus 333";
         text[4] = "therefore, i love among us 333";
         ImageIcon picture = new ImageIcon("Red.png");
-        LessonPage lesson1 = new LessonPage(title, text, picture);
+        LessonPage lesson1 = new LessonPage(frame, title, text, picture);
 
         return lesson1.getPanel();
     }

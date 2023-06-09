@@ -19,17 +19,17 @@ public class HomePage {
         lesson.setFont(button);
 
         // Centered Title
-        JPanel titleP = new JPanel(new FlowLayout());
+        JPanel topPanel = new JPanel(new BorderLayout());
         JLabel title = new JLabel("Projectile Motion Lesson");
         title.setFont(new Font("Serif", Font.PLAIN, 100));
-        titleP.add(title);
+        topPanel.add(title, BorderLayout.CENTER);
 
         // Copyright text
         JLabel copyright = new JLabel("© Danielle Lechange and Firepower1122, 2023");
         copyright.setFont(new Font("Serif", Font.PLAIN, 20));
 
         JPanel panel = new JPanel(new BorderLayout(0, 50));
-        panel.add(titleP, BorderLayout.NORTH);
+        panel.add(topPanel, BorderLayout.NORTH);
 
         JPanel center = new JPanel(new GridLayout(2, 1));
         JPanel centerBottom = new JPanel(new GridLayout(3, 1));

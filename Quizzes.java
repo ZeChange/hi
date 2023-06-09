@@ -5,24 +5,25 @@ import java.awt.event.*;
 public class Quizzes {
     private JFrame frame = new JFrame("Projectile Motion Quiz");
     private int pageOn = 0;
-    JPanel[] quizList = new JPanel[3];
+    QuizPage[] quizList = new QuizPage[3];
+    JPanel[] quizPanel = new JPanel[3];
 
     public Quizzes() {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Lesson 1:
-        JPanel lesson1 = lesson1();
+        QuizPage lesson1 = lesson1();
         quizList[0] = lesson1;
-        JPanel lesson2 = lesson2();
+        QuizPage lesson2 = lesson2();
         quizList[1] = lesson2;
-        JPanel lesson3 = lesson3();
+        QuizPage lesson3 = lesson3();
         quizList[2] = lesson3;
 
         
         for(int i = 0; i < quizList.length; i++)
         {
-            JPanel completePage = quizList[i];
+            JPanel completePage = quizList[i].getPanel();
 
             JPanel buttons = new JPanel(new FlowLayout());
             Font button = new Font("Serif", Font.PLAIN, 20);;
@@ -32,7 +33,6 @@ public class Quizzes {
                     if(pageOn != 0)
                     {
                         pageOn -= 1;
-                        System.out.println("notsus");
                         newScreen();
                     }
                 }
@@ -44,21 +44,35 @@ public class Quizzes {
             next.setFont(button);
             next.addActionListener(new ActionListener() {@Override
                 public void actionPerformed(ActionEvent f) {
-                    if(pageOn < quizList.length-1)
+                    if(pageOn < quizList.length-1 && (quizList[pageOn].finished() || quizList[pageOn].getTries() >= 5))
                     {
-                        pageOn += 1;
-                        System.out.println("mesus");
-                        newScreen();
+                        if(quizList[pageOn].getTries() >= 5 && !quizList[pageOn].finished())
+                        {
+                            int ans = JOptionPane.showConfirmDialog(null, "You have not completed the simulation. Would you like to continue?", "Confirmation", JOptionPane.YES_NO_OPTION);
+
+                            if (ans == JOptionPane.YES_OPTION)
+                            {
+                                pageOn += 1;
+                                newScreen();
+                            }
+                        }
+                        else{
+                            pageOn += 1;
+                            newScreen();
+                        }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog( null, "Please complete the simulation first, or try 5 times.", "Alert!", JOptionPane.INFORMATION_MESSAGE );
                     }
                 }
             });
             buttons.add(back); buttons.add(next);
             completePage.add(buttons, BorderLayout.SOUTH);
 
-            quizList[i] = completePage;
+            quizPanel[i] = completePage;
         }
 
-        frame.add(quizList[0]);
+        frame.add(quizPanel[0]);
         frame.setVisible(true);
     }   
 
@@ -68,36 +82,36 @@ public class Quizzes {
         frame = new JFrame("Projectile Motion Lesson");
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(quizList[pageOn]);
+        frame.add(quizPanel[pageOn]);
         frame.setVisible(true);
     }
 
-    public JPanel lesson1() {
+    public QuizPage lesson1() {
         String title = "question 1";
         String[] text = new String[5];
         text[0] = "if the impostor is sus";
         text[1] = "does that truly make me sus?";
         QuizPage quiz = new QuizPage(frame, title, text);
 
-        return quiz.getPanel();
+        return quiz;
     }
 
-    public JPanel lesson2() {
+    public QuizPage lesson2() {
         String title = "2";
         String[] text = new String[5];
         text[0] = "if the impostor is sus";
         text[1] = "does that truly make me sus?";
         QuizPage quiz = new QuizPage(frame, title, text);
 
-        return quiz.getPanel();
+        return quiz;
     }
-    public JPanel lesson3() {
+    public QuizPage lesson3() {
         String title = "3";
         String[] text = new String[5];
         text[0] = "if the impostor is sus";
         text[1] = "does that truly make me sus?";
         QuizPage quiz = new QuizPage(frame, title, text);
 
-        return quiz.getPanel();
+        return quiz;
     }
 }

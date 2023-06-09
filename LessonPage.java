@@ -4,13 +4,31 @@ import java.awt.event.*;
 
 public class LessonPage {
     private JPanel panel = new JPanel(new BorderLayout());
+    private JFrame frame;
 
-    public LessonPage(String title, String[] text, ImageIcon picture) {
+    public LessonPage(JFrame frame, String title, String[] text, ImageIcon picture) {
+        this.frame = frame;
 
         JLabel titleLabel = new JLabel(title);
         titleLabel.setFont(new Font("Serif", Font.PLAIN, 100));
-        JPanel titlePanel = new JPanel(new FlowLayout());
-        titlePanel.add(titleLabel);
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(titleLabel, BorderLayout.CENTER);
+        
+        ImageIcon homeIcon = new ImageIcon("2144.png");
+        Image image = homeIcon.getImage(); // Get the original image
+        Image resizedImage = image.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        ImageIcon resizedHomeIcon = new ImageIcon(resizedImage);
+        JButton homeButton = new JButton(resizedHomeIcon);
+        homeButton.setPreferredSize(new Dimension(100, 100));
+        homeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                HomePage homepage = new HomePage();
+            }
+        });
+
+        topPanel.add(homeButton, BorderLayout.EAST);
+
 
         JPanel content = new JPanel(new GridLayout(1, 2));
         JPanel contentText = new JPanel(new GridLayout(text.length, 1, 0, 25));
@@ -23,7 +41,7 @@ public class LessonPage {
         JLabel contentPicture = new JLabel(picture);
         content.add(contentPicture);
         
-        panel.add(titlePanel, BorderLayout.NORTH);
+        panel.add(topPanel, BorderLayout.NORTH);
         panel.add(content, BorderLayout.CENTER);
 
         JPanel fill1 = new JPanel();
