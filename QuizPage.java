@@ -97,7 +97,7 @@ public class QuizPage {
         });
 
         // bound to a scale of 10 pixels
-        JSlider initial_velocity_slider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
+        JSlider initial_velocity_slider = new JSlider(JSlider.HORIZONTAL, 0, 150, 0);
         initial_velocity_slider.setPaintTicks(true);
         initial_velocity_slider.setPaintLabels(true);
 
@@ -123,6 +123,10 @@ public class QuizPage {
                 double initial_height = (double)initial_height_slider.getValue();
                 physics.setInitialHeight(initial_height);
                 heightLabel.setText(Double.toString(initial_height) + " m");
+                if(!physics.inProgress())
+                {
+                    physics.changeHeight();
+                }
             }
         });
 

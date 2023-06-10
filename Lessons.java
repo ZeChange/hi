@@ -5,11 +5,13 @@ import java.awt.event.*;
 public class Lessons {
     private JFrame frame = new JFrame("Projectile Motion Lesson");
     private int pageOn = 0;
-    JPanel[] lessonList = new JPanel[3];
+    private JPanel[] lessonList = new JPanel[3];
+    private JScrollBar s = new JScrollBar();  
 
     public Lessons() {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(s);
 
         // Lesson 1:
         JPanel lesson1 = lesson1();

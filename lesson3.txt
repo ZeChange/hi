@@ -1,0 +1,4 @@
+A football is kicked with an initial velocity of 25 m/s at an angle of 40 degrees above the horizontal. Determine:
+a) The maximum height the football reaches.
+b) The time it takes for the football to reach its maximum height.
+c) The horizontal distance covered by the football before hitting the ground.
