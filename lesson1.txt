@@ -1,5 +1,0 @@
-A ball is launched from the ground with an initial velocity of 20 m/s at an angle of 30 degrees above the horizontal. Calculate:
-a) The horizontal component of the initial velocity.
-b) The vertical component of the initial velocity.
-c) The maximum height reached by the ball.
-d) The total time the ball is in the air.

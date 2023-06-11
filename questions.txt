@@ -1,0 +1,5 @@
+A soccer ball is kicked at an angle of _ degrees with the ground. If its initial velocity is * m/s, calculate the horizontal and vertical components of its velocity.
+A baseball is thrown horizontally from a height of _ meters with an initial velocity of * m/s. How far does it travel horizontally before hitting the ground?
+A cannonball is launched at an angle of _ degrees above the horizontal with an initial velocity of * m/s. Determine the maximum height reached by the cannonball.
+A javelin is thrown with an initial velocity of _ m/s at an angle of * degrees with the ground. Calculate the time it takes for the javelin to reach its maximum height.
+A basketball is thrown at an angle of _ degrees with the ground, and it lands @ meters away. If its initial velocity is * m/s, calculate the time of flight.

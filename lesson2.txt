@@ -1,4 +1,0 @@
-A cannonball is fired horizontally from a height of 20 meters above the ground with a velocity of 40 m/s. Calculate:
-a) The time it takes for the cannonball to hit the ground.
-b) The horizontal distance traveled by the cannonball before hitting the ground.
-c) The vertical velocity of the cannonball just before it hits the ground.
