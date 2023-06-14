@@ -12,8 +12,8 @@ public class PhysicsEngine extends JPanel {
     public Timer timer;
     public double x;
     public double y;
-    public double velocity_x;
-    public double velocity_y;
+    public double velocity_x = 0;
+    public double velocity_y = 0;
     public double initial_velocity;
     public double launch_angle;
     public int radius;
@@ -23,24 +23,21 @@ public class PhysicsEngine extends JPanel {
     private ArrayList<Physics> sprites = new ArrayList<>();
     private double initial_velocity_scaling;
     private boolean running = false;
-    private double scaling;
     private ArrayList<Point> trajectoryPoints; // Stores the trajectory points
 
-    public PhysicsEngine(double x, double y, double velocity_x, double velocity_y, double initial_velocity, double launch_angle, int radius, double answer, double initial_velocity_scaling) {
-        this.x = x / initial_velocity_scaling;
-        this.y = y / initial_velocity_scaling;
+    public PhysicsEngine(double x, double y, double initial_velocity, double launch_angle, int radius, double answer, double initial_velocity_scaling) {
+        // Initialize the physics engine with the provided parameters
+        this.x = x;
+        this.y = y;
 
-        this.velocity_x = velocity_x / initial_velocity_scaling;
-        this.velocity_y = velocity_y / initial_velocity_scaling;
-        this.initial_velocity = initial_velocity / initial_velocity_scaling;
+        this.initial_velocity = initial_velocity;
         this.launch_angle = launch_angle;
         this.radius = radius;
         this.answer = answer / initial_velocity_scaling;
         this.initial_velocity_scaling = initial_velocity_scaling;
 
-        this.scaling = initial_velocity_scaling;
-
-        sprites.add(new Circle(this.x, this.y, this.velocity_x, this.velocity_y, this.initial_velocity, this.launch_angle, this.radius));
+        // Create the initial circle sprite and add it to the list
+        sprites.add(new Circle(this.x, this.y, velocity_x, velocity_y, this.initial_velocity, this.launch_angle, this.radius, this.initial_velocity_scaling, getHeight()));
         repaint();
 
         Border blackline = BorderFactory.createLineBorder(Color.black);
@@ -50,24 +47,28 @@ public class PhysicsEngine extends JPanel {
     }
 
     public void simulation() {
+        // Start the simulation
         running = true;
         sprites.remove(0);
-        sprites.add(new Circle(this.x, this.y, this.velocity_x, this.velocity_y, this.initial_velocity, this.launch_angle, this.radius));
-        timer = new Timer(1000 / 60, new ActionListener() {
+        sprites.add(new Circle(x, y, velocity_x, velocity_y, initial_velocity, launch_angle, radius, initial_velocity_scaling, getHeight()));
+        timer = new Timer(17, new ActionListener() { // Approx 60 fps
             public void actionPerformed(ActionEvent e) {
                 for (Physics sprite : sprites) {
                     Circle circle = (Circle) sprite;
-                    if ((sprite.getY() + circle.getRadius() >= (getHeight() - circle.getRadius()))) {
+                    // Check if the sprite has hit the ground
+                    if (sprite.getY() + circle.getRadius() >= getHeight() - circle.getRadius()) {
                         circle.grounded();
-                        if (circle.getYVelocity() > 0) {
-                            circle.stop();
-                            ((Timer) e.getSource()).stop();
-                            if (sprite.getX() < answer + (double) 5 * initial_velocity_scaling && sprite.getX() > answer - (double) 5 * initial_velocity_scaling) {
-                                correct = true;
-                                System.out.println("bugatti");
-                            }
-                            running = false;
+                        
+                        circle.stop();
+                        ((Timer) e.getSource()).stop();
+                        // Check if the sprite's x-coordinate is close to the answer
+                        if (sprite.getX() < answer + 5 && sprite.getX() > answer - 5) {
+                            correct = true;
+                            System.out.println("bugatti");
                         }
+                        running = false;
+                        System.out.println("Answer: " + answer);
+                        
                     } else {
                         circle.airborne();
                     }
@@ -82,16 +83,19 @@ public class PhysicsEngine extends JPanel {
     }
 
     public void setInitialVelocity(double initial_velocity) {
-        this.initial_velocity = initial_velocity / initial_velocity_scaling;
+        // Update the initial velocity and repaint the panel
+        this.initial_velocity = initial_velocity;
         repaint();
     }
 
     public void setInitialHeight(double height) {
-        this.y = getHeight() - height * 4;
-        repaint();
+        // Update the initial height and trigger a change in height
+        this.y = height;
+        changeHeight();
     }
 
     public void setInitialAngle(double angle) {
+        // Update the launch angle and repaint the panel
         this.launch_angle = angle;
         repaint();
     }
@@ -121,7 +125,7 @@ public class PhysicsEngine extends JPanel {
         }
 
         for (int i = 0; i < 15; i++) {
-            double position = 100 * i * scaling;
+            double position = (double)100 * (double)i * initial_velocity_scaling;
             g.setColor(new Color(50, 50, 50));
             g.drawString(Double.toString(position), 100 * i - 15, getHeight() - 5);
             g.setColor(new Color(189, 189, 189));
@@ -130,13 +134,22 @@ public class PhysicsEngine extends JPanel {
     }
 
     public void changeHeight() {
+        // Change the height and update the circle sprite
         sprites.remove(0);
-        sprites.add(new Circle(this.x, this.y, this.velocity_x, this.velocity_y, this.initial_velocity, this.launch_angle, this.radius));
+        sprites.add(new Circle(x, y, velocity_x, velocity_y, initial_velocity, launch_angle, radius, initial_velocity_scaling, getHeight()));
         repaint();
     }
 
     private void updateTrajectoryPoints(double x, double y) {
+        // Add a new point to the trajectory points list
         trajectoryPoints.add(new Point((int) x, (int) y));
+    }
+
+    public void clearTrajectoryPoints()
+    {
+        // Clear the trajectory points list
+        trajectoryPoints.clear();
+        repaint();
     }
 }
 
@@ -147,11 +160,14 @@ class Physics {
     private double velocity_x;
     private double initial_velocity;
     public double launch_angle;
+    private double initial_velocity_scaling;
 
     private boolean isAirborne;
-    private double gravity = 9.8 / 60;
+    private double gravity = 9.80665 * 0.001 * 17;
+    private int height;
 
-    public Physics(double x, double y, double velocity_x, double velocity_y, double initial_velocity, double launch_angle) {
+    public Physics(double x, double y, double velocity_x, double velocity_y, double initial_velocity, double launch_angle, double initial_velocity_scaling, int height) {
+        // Initialize the physics object with the provided parameters
         this.x = x;
         this.y = y;
         this.velocity_x = velocity_x;
@@ -159,38 +175,44 @@ class Physics {
         this.initial_velocity = initial_velocity;
         this.launch_angle = launch_angle;
 
+        this.initial_velocity_scaling = initial_velocity_scaling;
+        this.height = height;
+
+        // Calculate the x and y velocities based on the initial velocity and launch angle
         this.velocity_x = this.initial_velocity * Math.cos(Math.toRadians(this.launch_angle));
         this.velocity_y = this.initial_velocity * Math.sin(Math.toRadians(this.launch_angle));
-
-        if (this.velocity_y > 0) {
-            this.velocity_y *= -1;
-        }
 
         this.isAirborne = true;
     }
 
     public void gravity_and_move() {
-        if (isAirborne || velocity_y < 0) {
+        // Apply gravity and update the position based on the current velocities
+        if (isAirborne || velocity_y > 0) {
             y += velocity_y;
-            velocity_y += gravity;
+            velocity_y -= gravity;
             x += velocity_x;
         }
     }
 
     public void grounded() {
+        // Set the object as grounded (not airborne)
         isAirborne = false;
     }
 
     public void airborne() {
+        // Set the object as airborne
         isAirborne = true;
     }
 
     public int getX() {
-        return (int) x;
+        // Return the x-coordinate scaled by the initial velocity scaling
+        return (int) (x/initial_velocity_scaling);
     }
 
     public int getY() {
-        return (int) y;
+        // Return the y-coordinate scaled by the initial velocity scaling
+        System.out.println(x + ", " + y);
+        return height - (int) (y/initial_velocity_scaling);
     }
 
     public double getYVelocity() {
@@ -206,21 +228,25 @@ class Physics {
     }
 
     public void stop() {
+        // Stop the object's movement by setting velocities and gravity to zero
         gravity = 0;
         velocity_x = 0;
         velocity_y = 0;
+        y = 0;
     }
 }
 
 class Circle extends Physics {
     private int radius;
 
-    public Circle(double x, double y, double velocity_x, double velocity_y, double initial_velocity, double launch_angle, int radius) {
-        super(x, y, velocity_x, velocity_y, initial_velocity, launch_angle);
+    public Circle(double x, double y, double velocity_x, double velocity_y, double initial_velocity, double launch_angle, int radius, double initial_velocity_scaling, int height) {
+        // Initialize the circle object with the provided parameters
+        super(x, y, velocity_x, velocity_y, initial_velocity, launch_angle, initial_velocity_scaling, height);
         this.radius = radius;
     }
 
     public void draw(Graphics g) {
+        // Draw the circle on the graphics object
         g.fillOval(getX() - radius, getY() - radius, radius * 2, radius * 2);
     }
 

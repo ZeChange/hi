@@ -9,9 +9,14 @@ import java.text.DecimalFormat;
 public class Quizzes {
     private JFrame frame = new JFrame("Projectile Motion Quiz");
     private int pageOn = 0;
-    QuizPage[] quizList = new QuizPage[5];
-    JPanel[] quizPanel = new JPanel[5];
+    QuizPage[] quizList = new QuizPage[2];
+    JPanel[] quizPanel = new JPanel[2];
     Random random = new Random();
+
+    public static final int VELOCITY = 1;
+    public static final int HEIGHT = 2;
+    public static final int ANGLE = 3;
+    public static final int MC = 0;
 
     public Quizzes() {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -24,18 +29,14 @@ public class Quizzes {
         quizList[0] = lesson1;
         QuizPage lesson2 = lesson2(questions.get(1));
         quizList[1] = lesson2;
-        QuizPage lesson3 = lesson3(questions.get(2));
-        quizList[2] = lesson3;
-        QuizPage lesson4 = lesson4(questions.get(3));
-        quizList[3] = lesson4;
-        QuizPage lesson5 = lesson5(questions.get(4));
-        quizList[4] = lesson5;
 
         for (int i = 0; i < quizList.length; i++) {
             JPanel completePage = quizList[i].getPanel();
 
             JPanel buttons = new JPanel(new FlowLayout());
             Font button = new Font("Serif", Font.PLAIN, 20);
+            
+            // Back button
             JButton back = new JButton("Back");
             back.addActionListener(new ActionListener() {
                 @Override
@@ -48,12 +49,13 @@ public class Quizzes {
             });
             back.setFont(button);
 
+            // Next button
             JButton next = new JButton("Next");
             next.setFont(button);
             next.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent f) {
-                    if (pageOn < quizList.length - 1 && (quizList[pageOn].finished() || quizList[pageOn].getTries() >= 5)) {
+                    if (quizList[pageOn].finished() || quizList[pageOn].getTries() >= 5) {
                         if (quizList[pageOn].getTries() >= 5 && !quizList[pageOn].finished()) {
                             int ans = JOptionPane.showConfirmDialog(null, "You have not completed the simulation. Would you like to continue?", "Confirmation", JOptionPane.YES_NO_OPTION);
 
@@ -65,8 +67,10 @@ public class Quizzes {
                             pageOn += 1;
                             newScreen();
                         }
+                    } else if(pageOn < quizList.length - 1) {
+                        // TODO: Handle special case if needed
                     } else {
-                         JOptionPane.showMessageDialog(null, "Please complete the simulation first, or try 5 times.", "Alert!", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Please complete the simulation first, or try 5 times.", "Alert!", JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
             });
@@ -81,6 +85,7 @@ public class Quizzes {
         frame.setVisible(true);
     }
 
+    // Loads questions from a file
     private List<String> loadQuestionsFromFile(String fileName) {
         List<String> questions = new ArrayList<>();
 
@@ -96,6 +101,7 @@ public class Quizzes {
         return questions;
     }
 
+    // Creates a new screen for the current quiz page
     public void newScreen() {
         frame.dispose();
         frame = new JFrame("Projectile Motion Lesson");
@@ -105,48 +111,52 @@ public class Quizzes {
         frame.setVisible(true);
     }
 
+    // Generates QuizPage for Lesson 1
     public QuizPage lesson1(String question) {
+        // Solve for initial height
         String title = "Question 1";
         String[] text = new String[5];
-        int angle = random.nextInt(31) + 30;
-        int initialVelocity = random.nextInt(101);
-
-        double horizontalVelocity = initialVelocity * Math.cos(Math.toRadians(angle));
-        double verticalVelocity = initialVelocity * Math.sin(Math.toRadians(angle));
+        double angle = random.nextDouble(30) + 10;
+        double initialVelocity = random.nextDouble(3) + 6;
+        
+        double[] simValues = new double[4];
+        simValues[0] = initialVelocity/10.0;
+        simValues[1] = angle;
+        simValues[2] = 40.0;
+        simValues[3] = 0.1;
         
         text[0] = question;
-        text[0] = text[0].replace("_", Integer.toString(angle));
-        text[0] = text[0].replace("*", Integer.toString(initialVelocity));
+        text[0] = text[0].replace("_", Double.toString(angle));
+        text[0] = text[0].replace("*", Double.toString(initialVelocity));
 
-        QuizPage quiz = new QuizPage(frame, title, text);
-
-        System.out.println("Question 1 - Horizontal Velocity: " + horizontalVelocity);
-        System.out.println("Question 1 - Vertical Velocity: " + verticalVelocity);
+        QuizPage quiz = new QuizPage(frame, title, text, HEIGHT, simValues);
 
         return quiz;
     }
-
+    
+    // Generates QuizPage for Lesson 2
     public QuizPage lesson2(String question) {
+        // Solve for initial velocity
         String title = "Question 2";
         String[] text = new String[5];
-
-        int height = random.nextInt(101) + 10;
-        int initialVelocity = random.nextInt(81) + 20;
-
-        double time = Math.sqrt(2 * height / 9.8);
-        double horizontalDistance = initialVelocity * time;
+        double angle = random.nextDouble(40) + 15;
+        double initialHeight = random.nextDouble(5) + 0;
+        
+        double[] simValues = new double[4];
+        simValues[0] = initialHeight/2.0;
+        simValues[1] = angle;
+        simValues[2] = 300.0;
+        simValues[3] = 0.5;
         
         text[0] = question;
-        text[0] = text[0].replace("_", Integer.toString(height));
-        text[0] = text[0].replace("*", Integer.toString(initialVelocity));
+        text[0] = text[0].replace("_", Double.toString(angle));
+        text[0] = text[0].replace("*", Double.toString(initialHeight));
 
-        QuizPage quiz = new QuizPage(frame, title, text);
-
-        System.out.println("Question 2 - Distance: " + horizontalDistance);
+        QuizPage quiz = new QuizPage(frame, title, text, VELOCITY, simValues);
 
         return quiz;
     }
-
+/* 
     public QuizPage lesson3(String question) {
         String title = "Question 3";
         String[] text = new String[5];
@@ -208,4 +218,5 @@ public class Quizzes {
 
         return quiz;
     }
+    */
 }

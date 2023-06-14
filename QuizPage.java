@@ -4,7 +4,6 @@ import java.awt.event.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-
 public class QuizPage {
     public Timer timer;
     private JPanel panel = new JPanel(new BorderLayout());
@@ -15,7 +14,13 @@ public class QuizPage {
     private boolean completed = false;
     private static int score = 0;
 
-    public QuizPage(JFrame frame, String title, String[] text) {
+    public static final int VELOCITY = 1;
+    public static final int HEIGHT = 2;
+    public static final int ANGLE = 3;
+    public static final int MC = 0;
+
+    // Values to be inputted into the array in this order of priority: Velocity, Height, Angle, Distance(Answer), Scaling
+    public QuizPage(JFrame frame, String title, String[] text, int type, double[] simValues) {
         this.frame = frame; // Assign frame
 
         JLabel titleLabel = new JLabel(title);
@@ -58,35 +63,30 @@ public class QuizPage {
 
         // Button for starting the sim
         JButton startSim = new JButton("Start Simulator");
-        startSim.addActionListener(new ActionListener() {@Override
+        startSim.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-                if(physics.inProgress())
-                {
-                    JOptionPane.showMessageDialog( null, "Please wait for the simulation to finish!", "Alert!", JOptionPane.INFORMATION_MESSAGE );
-                }
-                else{
+                if (physics.inProgress()) {
+                    JOptionPane.showMessageDialog(null, "Please wait for the simulation to finish!", "Alert!", JOptionPane.INFORMATION_MESSAGE);
+                } else {
                     tries += 1;
                     attempts.setText("Attempts: " + tries + "/5");
                     physics.simulation();
-                    timer = new Timer(1000/10, new ActionListener() { @Override // 10 fps (does not need to be that fast)
+                    timer = new Timer(1000 / 10, new ActionListener() {
+                        @Override // 10 fps (does not need to be that fast)
                         public void actionPerformed(ActionEvent a) {
-                            if(physics.getCorrect())
-                            {
-                                if(!completed)
-                                {
-                                    if(tries < 5)
-                                    {
+                            if (physics.getCorrect()) {
+                                if (!completed) {
+                                    if (tries < 5) {
                                         score += 1;
                                         completed = true;
                                     }
                                     scoreCard.setText("Score: " + score + "/5");
-                                    JOptionPane.showMessageDialog( null, "You have completed the simulation!", "Success!", JOptionPane.INFORMATION_MESSAGE );
+                                    JOptionPane.showMessageDialog(null, "You have completed the simulation!", "Success!", JOptionPane.INFORMATION_MESSAGE);
                                 }
 
                                 timer.stop();
-                            }
-                            else if(!physics.inProgress())
-                            {
+                            } else if (!physics.inProgress()) {
                                 timer.stop();
                             }
                         }
@@ -105,13 +105,15 @@ public class QuizPage {
         initial_velocity_slider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent f) {
-                double initial_velocity = (double)initial_velocity_slider.getValue();
+                double initial_velocity = (double) initial_velocity_slider.getValue();
                 physics.setInitialVelocity(initial_velocity);
                 valueLabel.setText(Double.toString(initial_velocity) + " m/s");
+                if (!physics.inProgress()) {
+                    physics.repaint();
+                }
             }
         });
-        
-        
+
         JSlider initial_height_slider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
         initial_height_slider.setPaintTicks(true);
         initial_height_slider.setPaintLabels(true);
@@ -120,12 +122,11 @@ public class QuizPage {
         initial_height_slider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent f) {
-                double initial_height = (double)initial_height_slider.getValue();
+                double initial_height = (double) initial_height_slider.getValue();
                 physics.setInitialHeight(initial_height);
                 heightLabel.setText(Double.toString(initial_height) + " m");
-                if(!physics.inProgress())
-                {
-                    physics.changeHeight();
+                if (!physics.inProgress()) {
+                    physics.repaint();
                 }
             }
         });
@@ -138,26 +139,49 @@ public class QuizPage {
         initial_angle_slider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent f) {
-                double initial_angle = (double)initial_angle_slider.getValue();
+                double initial_angle = (double) initial_angle_slider.getValue();
                 physics.setInitialAngle(initial_angle);
                 angleLabel.setText(Double.toString(initial_angle) + "°");
+                if (!physics.inProgress()) {
+                    physics.repaint();
+                }
             }
         });
 
         JPanel interactables = new JPanel();
         interactables.add(attempts);
         interactables.add(startSim);
-        interactables.add(initial_velocity_slider);
-        interactables.add(valueLabel);
-        interactables.add(initial_height_slider);
-        interactables.add(heightLabel);
-        interactables.add(initial_angle_slider);
-        interactables.add(angleLabel);
+        if (type == VELOCITY) {
+            interactables.add(initial_velocity_slider);
+            interactables.add(valueLabel);
+            physics = new PhysicsEngine(0, simValues[0], 0, simValues[1], 5, simValues[2], simValues[3]);
+        }
+        if (type == HEIGHT) {
+            interactables.add(initial_height_slider);
+            interactables.add(heightLabel);
+            physics = new PhysicsEngine(0, 0, simValues[0], simValues[1], 5, simValues[2], simValues[3]);
+        }
+        if (type == ANGLE) {
+            interactables.add(initial_angle_slider);
+            interactables.add(angleLabel);
+            physics = new PhysicsEngine(0, simValues[1], simValues[0], 0, 5, simValues[2], simValues[3]);
+        }
+        JButton clearPoints = new JButton("Clear Points");
+        clearPoints.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (physics.inProgress()) {
+                    JOptionPane.showMessageDialog(null, "Please wait for the simulation to finish!", "Alert!", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    physics.clearTrajectoryPoints();
+                }
+            }
+        });
+        interactables.add(clearPoints);
         contentText.add(interactables);
 
         content.add(contentText);
 
-        physics = new PhysicsEngine(100, 0, 0, 0, 0, 0, 5, 2370, 10);
         physicsPanel = physics;
         content.add(physicsPanel);
 
@@ -172,6 +196,7 @@ public class QuizPage {
 
         panel.add(fill1, BorderLayout.WEST);
         panel.add(fill2, BorderLayout.EAST);
+        physics.repaint();
     }
 
     public JPanel getPanel() {
