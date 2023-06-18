@@ -32,31 +32,30 @@ public class LessonPage {
 
         topPanel.add(homeButton, BorderLayout.EAST);
 
-
-        JPanel content = new JPanel(new GridLayout(1, 2));
-        JPanel contentText = new JPanel(new GridLayout(text.length, 1, 0, 25));
-        // Create JLabels for each paragraph of text and add them to the contentText panel
-        for(String paragraph : text)
-        {
-            JLabel lines = new JLabel(paragraph);
-            contentText.add(lines);
-        }
-        content.add(contentText);
-        // Create a JLabel for the picture and add it to the content panel
-        JLabel contentPicture = new JLabel(picture);
-        content.add(contentPicture);
+        // JPanel content = new JPanel(new GridLayout(1, 2));
+        // JPanel contentText = new JPanel(new GridLayout(text.length, 1, 0, 25));
+        // // Create JLabels for each paragraph of text and add them to the contentText panel
+        // for(String paragraph : text)
+        // {
+        //     JLabel lines = new JLabel(paragraph);
+        //     contentText.add(lines);
+        // }
+        // content.add(contentText);
+        // // Create a JLabel for the picture and add it to the content panel
+        // JLabel contentPicture = new JLabel(picture);
+        // content.add(contentPicture);
         
-        panel.add(topPanel, BorderLayout.NORTH);
-        panel.add(content, BorderLayout.CENTER);
+        // panel.add(topPanel, BorderLayout.NORTH);
+        // panel.add(content, BorderLayout.CENTER);
 
-        // Create fill panels to add spacing on the sides
-        JPanel fill1 = new JPanel();
-        fill1.setPreferredSize(new Dimension(200, 0));
-        JPanel fill2 = new JPanel();
-        fill2.setPreferredSize(new Dimension(200, 0));
+        // // Create fill panels to add spacing on the sides
+        // JPanel fill1 = new JPanel();
+        // fill1.setPreferredSize(new Dimension(200, 0));
+        // JPanel fill2 = new JPanel();
+        // fill2.setPreferredSize(new Dimension(200, 0));
 
-        panel.add(fill1, BorderLayout.WEST);
-        panel.add(fill2, BorderLayout.EAST);
+        // panel.add(fill1, BorderLayout.WEST);
+        // panel.add(fill2, BorderLayout.EAST);
     }   
 
     public JPanel getPanel() {

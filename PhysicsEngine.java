@@ -118,7 +118,6 @@ public class PhysicsEngine extends JPanel {
             ((Circle) sprite).draw(g);
         }
         
-        Random random = new Random();
         g.setColor(Color.RED);
         for (Point point : trajectoryPoints) {
             g.fillOval(point.x - 2, point.y - 2, 5, 5);
@@ -126,8 +125,6 @@ public class PhysicsEngine extends JPanel {
 
         for (int i = 0; i < 15; i++) {
             double position = (double)100 * (double)i * initial_velocity_scaling;
-            g.setColor(new Color(50, 50, 50));
-            g.drawString(Double.toString(position), 100 * i - 15, getHeight() - 5);
             g.setColor(new Color(189, 189, 189));
             g.drawLine(i * 100, 0, i * 100, getHeight() - 20);
         }
