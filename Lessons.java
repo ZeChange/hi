@@ -92,14 +92,14 @@ public class Lessons {
         String title = "Lesson 1: Tutorial - Introduction to Projectile Motion";
 
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10)); // Add padding on the left
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10)); // move it a bit to the left
 
         JLabel titleLabel = new JLabel(title);
         titleLabel.setFont(new Font("Serif", Font.BOLD, 24));
         panel.add(titleLabel, BorderLayout.NORTH);
 
         JPanel subsectionsPanel = new JPanel(new CardLayout());
-        subsectionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0)); // Add padding on the top
+        subsectionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         subsectionsPanel.add(createSubsectionPanel("Overview of Projectile Motion", "<html>Projectile motion refers to the curved path followed by an object launched into the air, moving under the influence of gravity alone. It occurs when an object is propelled with an initial velocity and then moves freely in the air, subject only to the force of gravity.</html>", subsectionsPanel));
         subsectionsPanel.add(createSubsectionPanel("Key Concepts and Principles", "<html>a. <span style=\"font-size: 105%;\">Horizontal and Vertical Components:</span><br><br>When an object is launched in projectile motion, its motion can be broken down into two components: horizontal and vertical. The horizontal component remains constant throughout the motion, while the vertical component is influenced by gravity.<br><br>b. <span style=\"font-size: 105%;\">Trajectory:</span><br><br>The trajectory of a projectile is the path it follows through the air. It is typically curved, forming a parabolic shape. The exact shape of the trajectory depends on factors such as the launch angle, initial velocity, and gravitational force.<br><br>c. <span style=\"font-size: 105%;\">Range:</span><br><br>The range of a projectile refers to the horizontal distance covered by the object before it lands. The range is determined by the initial velocity and launch angle of the projectile.<br><br>d. <span style=\"font-size: 105%;\">Time of Flight:</span><br><br>The time of flight is the total time taken for a projectile to complete its trajectory and return to the same level as the launch point. It is influenced by the launch angle and initial velocity.<br><br>e. <span style=\"font-size: 105%;\">Maximum Height:</span><br><br>The maximum height reached by a projectile is determined by the launch angle and initial velocity. The object reaches its highest point in the trajectory before falling back to the ground.<br><br></html>", subsectionsPanel));
         subsectionsPanel.add(createSubsectionPanel("Real-Life Applications", "<html><span style=\"font-size: 105%;\">a. Sports:</span><br><br>Understanding projectile motion is crucial in sports such as basketball, baseball, soccer, and golf. Athletes use the principles of projectile motion to optimize their performance, such as calculating the optimal angle for a long jump or the trajectory for a soccer goal.<br><br><span style=\"font-size: 105%;\">b. Fireworks:</span><br><br>Fireworks displays involve projectiles launched into the air that explode at different heights and distances. The designers consider the principles of projectile motion to create visually appealing patterns.<br><br><span style=\"font-size: 105%;\">c. Projectile Weapons:</span><br><br>Projectile motion principles are employed in the design and functioning of artillery, missiles, and other projectile weapons. These weapons are launched with specific velocities and angles to accurately hit their targets.<br><br><span style=\"font-size: 105%;\">d. Astronomy:</span><br><br>The motion of celestial bodies, such as planets, moons, and satellites, follows the principles of projectile motion. Understanding these principles helps astronomers predict their paths and trajectories.<br><br></html>", subsectionsPanel));
@@ -112,7 +112,7 @@ public class Lessons {
         String title = "Lesson 2: Exploring Projectile Trajectories";
 
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10)); // Add padding on the left
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
 
         JLabel titleLabel = new JLabel(title);
         titleLabel.setFont(new Font("Serif", Font.BOLD, 24));
@@ -135,7 +135,7 @@ public class Lessons {
         String title = "Lesson 3: Calculating Range and Maximum Height of a Projectile";
 
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10)); // Add padding on the left
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
 
         JLabel titleLabel = new JLabel(title);
         titleLabel.setFont(new Font("Serif", Font.BOLD, 24));
@@ -156,7 +156,7 @@ public class Lessons {
         String title = "Lesson 4: Projectiles Launched at an Angle";
 
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10)); // Add padding on the left
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
 
         JLabel titleLabel = new JLabel(title);
         titleLabel.setFont(new Font("Serif", Font.BOLD, 24));
@@ -178,7 +178,7 @@ public class Lessons {
         String title = "Lesson 5: Factors That Impact Projectile Motion";
 
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10)); // Add padding on the left
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
 
         JLabel titleLabel = new JLabel(title);
         titleLabel.setFont(new Font("Serif", Font.BOLD, 24));
@@ -198,7 +198,7 @@ public class Lessons {
 
     private JPanel createSubsectionPanel(String title, String text, JPanel parentPanel) {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10)); // Add padding on the left
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
 
         // Title
         JLabel titleLabel = new JLabel(title);
@@ -207,7 +207,7 @@ public class Lessons {
 
         // Text
         JLabel textLabel = new JLabel(text);
-        textLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0)); // Add padding between paragraphs
+        textLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
         panel.add(textLabel, BorderLayout.CENTER);
 
         // Next and Back buttons
@@ -220,9 +220,16 @@ public class Lessons {
 
         // Add action listeners to the buttons
         CardLayout cardLayout = (CardLayout) parentPanel.getLayout();
-        backButton.addActionListener(e -> cardLayout.previous(parentPanel));
-        nextButton.addActionListener(e -> cardLayout.next(parentPanel));
-
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.previous(parentPanel);
+            }
+        });
+        nextButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.next(parentPanel);
+            }
+        });
         return panel;
     }
 }

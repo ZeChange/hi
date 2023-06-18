@@ -19,9 +19,17 @@ public class HomePage {
         JButton lesson = new JButton("Lesson");
         lesson.setFont(button);
 
+        JButton simulator = new JButton("Simulator");
+        simulator.setFont(button);
+
+        JPanel buttons = new JPanel(new FlowLayout());
+        buttons.add(lesson);
+        buttons.add(simulator);
+        buttons.add(quiz);
+
         // Create a centered title panel
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel title = new JLabel("Projectile Motion Lesson");
+        JLabel title = new JLabel("Projectile Motion");
         title.setFont(new Font("Serif", Font.PLAIN, 100));
         topPanel.add(title, BorderLayout.CENTER);
 
@@ -32,41 +40,8 @@ public class HomePage {
         // Create the main panel and configure its layout
         JPanel panel = new JPanel(new BorderLayout(0, 50));
         panel.add(topPanel, BorderLayout.NORTH);
-
-        // Create center and centerBottom panels
-        JPanel center = new JPanel(new GridLayout(2, 1));
-        JPanel centerBottom = new JPanel(new GridLayout(3, 1));
-
-        // Create filler panels
-        JPanel fill0a = new JPanel();
-        JPanel fill0b = new JPanel();
-        JPanel fill1 = new JPanel();
-
-        // Create a panel for the buttons in the centerBottom panel
-        JPanel centerBottomA = new JPanel(new GridLayout(1, 3, 250, 0));
-        centerBottomA.add(lesson);
-        centerBottomA.add(fill1);
-        centerBottomA.add(quiz);
-
-        // Add components to the center and centerBottom panels
-        centerBottom.add(fill0a);
-        centerBottom.add(fill0b);
-        centerBottom.add(centerBottomA);
-        center.add(centerBottom);
-        panel.add(center, BorderLayout.CENTER);
-
-        // Create a panel for the copyright text and add it to the south of the main panel
-        JPanel south = new JPanel(new FlowLayout());
-        south.add(copyright);
-        panel.add(south, BorderLayout.SOUTH);
-
-        // Create filler panels for the sides
-        JPanel fill2 = new JPanel();
-        fill2.setPreferredSize(new Dimension(200, 0));
-        panel.add(fill2, BorderLayout.EAST);
-        JPanel fill3 = new JPanel();
-        fill3.setPreferredSize(new Dimension(200, 0));
-        panel.add(fill3, BorderLayout.WEST);
+        panel.add(buttons, BorderLayout.CENTER);
+        panel.add(copyright, BorderLayout.SOUTH);
 
         // Add the panel to the frame and make it visible
         frame.add(panel);
@@ -83,6 +58,13 @@ public class HomePage {
         lesson.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Lessons lessons = new Lessons();
+                frame.dispose();
+            }
+        });
+
+        simulator.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                FreeSimulator simulator = new FreeSimulator();
                 frame.dispose();
             }
         });

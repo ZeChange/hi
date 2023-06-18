@@ -1,5 +1,6 @@
-A soccer ball is kicked at an angle of _ degrees with the ground. If its initial velocity is * m/s, calculate the horizontal and vertical components of its velocity.
-A baseball is thrown horizontally from a height of _ meters with an initial velocity of * m/s. How far does it travel horizontally before hitting the ground?
-A cannonball is launched at an angle of _ degrees above the horizontal with an initial velocity of * m/s. Determine the maximum height reached by the cannonball.
-A javelin is thrown with an initial velocity of _ m/s at an angle of * degrees with the ground. Calculate the time it takes for the javelin to reach its maximum height.
-A basketball is thrown at an angle of _ degrees with the ground, and it lands @ meters away. If its initial velocity is * m/s, calculate the time of flight.
+A construction worker on a ladder throws a ball to a person below the ladder @ metres away. If he throws at an angle of * degrees above the horizontal with a speed of > m/s, how high must he be for the person to catch it?
+Caesar Wangchu Zhou strikes a golf ball at _ m above the hole at an angle of * degrees. If the hole was @ metres away, how much initial velocity did he give the ball?
+Spotting a deer in the forest that is @ metres away, a hunter fires a bullet with a speed of > m/s and at an elevation of _ metres. At what angle above the horizontal should the hunter aim his rifle?
+While under attack, a pirate ship's cannon is fired at an angle of * degrees, a velocity of > m/s, and an elevation of _ metres. How far away will the cannonball land?
+Practicing on a hill, a javelin thrower throws at an angle of * degrees, a velocity of > m/s, and an elevation of _ metres. How far will the javelin go?
+Convention: @ = distance, > = velocity, _ = height, * = degrees
